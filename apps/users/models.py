@@ -17,7 +17,10 @@ class UserProfile(AbstractUser):
         verbose_name_plural=verbose_name
 
     def __str__(self):
-        return self.name
+        if self.name ==None:
+            return ''
+        else:
+            return self.name
 
 class VerifyCode(models.Model):
      "短信验证码"
