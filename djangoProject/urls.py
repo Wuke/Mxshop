@@ -22,7 +22,7 @@ from djangoProject.settings import MEDIA_ROOT
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 # from goods.view_base import GoodsListView
-from goods.views import GoodsListViewSet
+from goods.views import GoodsListViewSet,CategoryViewset
 from rest_framework.routers import SimpleRouter,DefaultRouter
 
 
@@ -30,6 +30,12 @@ router = DefaultRouter()
 
 # 配置goods的url
 router.register(r'goods',GoodsListViewSet,basename='goods')
+# 配置GoodsCategory的url
+router.register(r'categories',CategoryViewset,basename='categories')
+
+goods_list = GoodsListViewSet.as_view({
+    'get':'list',
+})
 
 urlpatterns = [
     url('admin/', xadmin.site.urls),
