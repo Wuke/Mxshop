@@ -15,7 +15,7 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.conf.urls import url
-from django.urls import include
+from django.urls import include, path
 
 import xadmin
 from djangoProject.settings import MEDIA_ROOT
@@ -25,12 +25,16 @@ from rest_framework.documentation import include_docs_urls
 from goods.views import GoodsListViewSet,CategoryViewset
 from rest_framework.routers import SimpleRouter,DefaultRouter
 from rest_framework.authtoken import views
-
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = DefaultRouter()
 
 # 配置goods的url
-router.register(r'goods',GoodsListViewSet,basename='goods')
+router.register(r'goods',GoodsListViewSet,basename='goods_list')
 # 配置GoodsCategory的url
 router.register(r'categories',CategoryViewset,basename='categories')
 
@@ -46,6 +50,12 @@ urlpatterns = [
     #商品列表页
     url(r'^',include(router.urls)),
     url(r'docs/',include_docs_urls(title='mx生鲜')),
-    url(r'^api-token-auth/', views.obtain_auth_token)
+    # drf token
+    # url(r'^drf_token', views.obtain_auth_token),
+    # jwt token
+    url(r'^login/', obtain_jwt_token),
+    # url(r'api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # url(r'api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+
 
 ]

@@ -26,6 +26,7 @@ class VerifyCode(models.Model):
      "短信验证码"
      code = models.CharField(max_length=10,verbose_name='验证码')
      mobile = models.CharField(max_length=11,verbose_name='电话')
+     email = models.EmailField(max_length=64,verbose_name='邮件')
      add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
 
      class Meta:

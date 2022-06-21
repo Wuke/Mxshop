@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import datetime
+from datetime import timedelta
 from pathlib import Path
 import sys
 import os
@@ -49,7 +50,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'django_filters',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
+    'rest_framework_jwt',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +140,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+
 STATIC_URL = '/static/'
 
 # Default primary key field type
@@ -149,9 +155,44 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+    # 设置所有接口都需要被验证
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    # 用户登陆认证方式
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+
+}
+
+
+
+# wukozpvflztfgcib
+
+# 发送邮件配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# smtp服务地址
+EMAIL_HOST = 'smtp.qq.com'
+# 端口默认都是25不需要修改
+EMAIL_PORT = 25
+# 发送邮件的邮箱，需要配置开通SMTP
+EMAIL_HOST_USER = '1243209334@qq.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'Junchang11'
+# 收件人看到的发件人
+EMAIL_FROM = 'test<1243209334@qq.com>'
+# 这⾥必须是True，否则发送不成功
+EMAIL_USE_TLS = True
+
+REGEX_EMAIL = ' /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
+REGEX_MOBILE = "^1[358\d{9}$|^147\d{8}$|^176\d{8}$"
+
+API_KEY = 'b7102a2a29b4c80dd0cf6bee3a6e518f'

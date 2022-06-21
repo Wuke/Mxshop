@@ -1,7 +1,11 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import mixins
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+# from rest_framework_simplejwt import authentication
+
 from .filters import GoodsFilter
 from .serializers import GoodsSerializer, CategorySerializer
 from goods.models import Goods, GoodsCategory
@@ -18,7 +22,8 @@ class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
     "商品列表页，分页，搜索，过滤，排序"
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
-    authentication_classes = (TokenAuthentication,)
+    # permission_classes = [IsAuthenticated]
+    authentication_classes = (JSONWebTokenAuthentication,)
     pagination_class = GoodsPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,filters.OrderingFilter,)
     # 排序
