@@ -30,6 +30,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from users.views import EmailCodeViewset
 
 router = DefaultRouter()
 
@@ -38,6 +39,7 @@ router.register(r'goods',GoodsListViewSet,basename='goods_list')
 # 配置GoodsCategory的url
 router.register(r'categories',CategoryViewset,basename='categories')
 
+router.register(r'email',EmailCodeViewset,basename='email')
 goods_list = GoodsListViewSet.as_view({
     'get':'list',
 })

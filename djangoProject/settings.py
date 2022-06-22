@@ -186,13 +186,13 @@ EMAIL_PORT = 25
 # 发送邮件的邮箱，需要配置开通SMTP
 EMAIL_HOST_USER = '1243209334@qq.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'Junchang11'
+EMAIL_HOST_PASSWORD = 'kgfuwlorkfeujehc'
 # 收件人看到的发件人
 EMAIL_FROM = 'test<1243209334@qq.com>'
 # 这⾥必须是True，否则发送不成功
 EMAIL_USE_TLS = True
 
-REGEX_EMAIL = ' /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/'
+REGEX_EMAIL = '^[A-Za-z0-9\-_]+[A-Za-z0-9\.\-_]*[A-Za-z0-9\-_]+@[A-Za-z0-9]+[A-Za-z0-9\.\-_]*(\.[A-Za-z0-9\.\-_]+)*[A-Za-z0-9]+\.[A-Za-z0-9]+[A-Za-z0-9\.\-_]*[A-Za-z0-9]+$'
 REGEX_MOBILE = "^1[358\d{9}$|^147\d{8}$|^176\d{8}$"
 
 API_KEY = 'b7102a2a29b4c80dd0cf6bee3a6e518f'

@@ -10,7 +10,7 @@ User = get_user_model()
 
 class EmailSerializer(serializers.Serializer):
 
-    email = serializers.EmailField(required=True)
+    email = serializers.CharField(required=True)
 
     def validate_email(self,email):
         """
