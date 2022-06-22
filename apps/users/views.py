@@ -5,14 +5,12 @@ from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.mixins import CreateModelMixin
-from django.shortcuts import render
-# Create your views here
 from rest_framework.response import Response
 
 from djangoProject import settings
 from .models import VerifyCode
-from .serializer import EmailSerializer
-from django.core.mail import send_mail, EmailMessage
+from .serializer import EmailSerializer,UserRegSerializer
+from django.core.mail import EmailMessage
 User = get_user_model()
 
 #encoding=utf-8
@@ -96,4 +94,6 @@ class UserViewset(CreateModelMixin,viewsets.GenericViewSet):
     """
     用户
     """
+    serializer_class = UserRegSerializer
+    queryset = User.objects.all()
 

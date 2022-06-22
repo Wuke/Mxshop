@@ -23,14 +23,11 @@ from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 # from goods.view_base import GoodsListView
 from goods.views import GoodsListViewSet,CategoryViewset
-from rest_framework.routers import SimpleRouter,DefaultRouter
+from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-from users.views import EmailCodeViewset
+
+from users.views import EmailCodeViewset,UserViewset
 
 router = DefaultRouter()
 
@@ -38,6 +35,8 @@ router = DefaultRouter()
 router.register(r'goods',GoodsListViewSet,basename='goods_list')
 # 配置GoodsCategory的url
 router.register(r'categories',CategoryViewset,basename='categories')
+#配置UserViewset的url
+router.register(r'users',UserViewset,basename='users')
 
 router.register(r'email',EmailCodeViewset,basename='email')
 goods_list = GoodsListViewSet.as_view({
@@ -56,8 +55,7 @@ urlpatterns = [
     # url(r'^drf_token', views.obtain_auth_token),
     # jwt token
     url(r'^login/', obtain_jwt_token),
-    # url(r'api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # url(r'api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+
 
 
 ]
