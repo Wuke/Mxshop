@@ -8,18 +8,18 @@ from users.models import VerifyCode
 
 User = get_user_model()
 
-class EmailSerializer(serializers.Serializer):
 
+class EmailSerializer(serializers.Serializer):
     email = serializers.CharField(required=True)
 
-    def validate_email(self,email):
+    def validate_email(self, email):
         """
         验证email
         :param data:
         :return:
         """
         # email是否注册
-        if User.objects.filter(email = email).count():
+        if User.objects.filter(email=email).count():
             raise serializers.ValidationError('用户存在')
             # 验证邮箱号码合法
         if not re.match(REGEX_EMAIL, email):
@@ -30,3 +30,23 @@ class EmailSerializer(serializers.Serializer):
             raise serializers.ValidationError('请一分钟后再次发送')
         return email
 
+
+class UserSerializer(serializers.ModelSerializer):
+    code = serializers.CharField(max_length=6, min_length=6, required=True)
+
+    def validate_code(self, code):
+        verify_record = VerifyCode.objects.filter(email=self.initial_data['email']).order_by('-add_time')
+        if verify_record:
+            last_record = verify_record[0]
+            two_minute_age = datetime.now() - timedelta(hours=0, minutes=2, seconds=0)
+            if two_minute_age < last_record.add_time:
+                raise serializers.ValidationError('验证码过期')
+            if last_record.code != code:
+                raise serializers.ValidationError('验证码错误')
+            return code
+        else:
+            raise serializers.ValidationError('验证码错误')
+
+    class Meta:
+        model = User
+        fields = ('username', 'code', 'email')

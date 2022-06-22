@@ -90,3 +90,10 @@ class EmailCodeViewset(CreateModelMixin,viewsets.GenericViewSet):
             return Response(
                 {"msg": f"验证码已经向 {email} 发送完成"}, status=status.HTTP_201_CREATED
             )
+
+class UserViewset(CreateModelMixin,viewsets.GenericViewSet):
+
+    """
+    用户
+    """
+
