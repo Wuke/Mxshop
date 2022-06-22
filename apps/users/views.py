@@ -6,11 +6,12 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
-
 from djangoProject import settings
 from .models import VerifyCode
 from .serializer import EmailSerializer,UserRegSerializer
 from django.core.mail import EmailMessage
+from rest_framework_jwt.serializers import jwt_encode_handler,jwt_payload_handler
+
 User = get_user_model()
 
 #encoding=utf-8
@@ -77,7 +78,7 @@ class EmailCodeViewset(CreateModelMixin,viewsets.GenericViewSet):
         # 随机生成code
         code = self.generate_code()
         # 发送短信或邮件验证码
-        sms_status = SendVerifyCode.send_email_code(code=self.generate_code(), email=email)
+        sms_status = SendVerifyCode.send_email_code(code=code, email=email)
         if sms_status == 0:
             # 记录日志
             return Response({"msg": "邮件发送失败"}, status=status.HTTP_400_BAD_REQUEST)
@@ -97,3 +98,16 @@ class UserViewset(CreateModelMixin,viewsets.GenericViewSet):
     serializer_class = UserRegSerializer
     queryset = User.objects.all()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.perform_create(serializer)
+        re_dict = serializer.data
+        payload = jwt_payload_handler(user)
+        re_dict['token'] = jwt_encode_handler(payload)
+        re_dict['name'] = user.name if user.name else user.username
+        headers = self.get_success_headers(serializer.data)
+        return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        return serializer.save()
