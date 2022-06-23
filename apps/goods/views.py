@@ -22,7 +22,7 @@ class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
     "商品列表页，分页，搜索，过滤，排序"
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     authentication_classes = (JSONWebTokenAuthentication,)
     pagination_class = GoodsPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,filters.OrderingFilter,)

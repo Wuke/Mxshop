@@ -36,12 +36,12 @@ router.register(r'goods',GoodsListViewSet,basename='goods_list')
 # 配置GoodsCategory的url
 router.register(r'categories',CategoryViewset,basename='categories')
 #配置UserViewset的url
-router.register(r'users',UserViewset,basename='users')
+router.register(r'Register',UserViewset,basename='users')
 
-router.register(r'email',EmailCodeViewset,basename='email')
-goods_list = GoodsListViewSet.as_view({
-    'get':'list',
-})
+router.register(r'verification',EmailCodeViewset,basename='email')
+# goods_list = GoodsListViewSet.as_view({
+#     'get':'list',
+# })
 
 urlpatterns = [
     url('admin/', xadmin.site.urls),
@@ -55,6 +55,7 @@ urlpatterns = [
     # url(r'^drf_token', views.obtain_auth_token),
     # jwt token
     url(r'^login/', obtain_jwt_token),
+
 
 
 
