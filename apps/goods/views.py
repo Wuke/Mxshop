@@ -12,33 +12,34 @@ from goods.models import Goods, GoodsCategory
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import TokenAuthentication
 
+
 class GoodsPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
-    page_query_param = 'p'
+    page_query_param = 'page'
     max_page_size = 100
 
-class GoodsListViewSet(mixins.ListModelMixin,viewsets.GenericViewSet):
-    "商品列表页，分页，搜索，过滤，排序"
+
+class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet,mixins.RetrieveModelMixin):
+    """商品列表页，分页，搜索，过滤，排序"""
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = (JSONWebTokenAuthentication,)
+    # GoodsListViewSet认证的演示
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = (JSONWebTokenAuthentication,)
     pagination_class = GoodsPagination
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,filters.OrderingFilter,)
+    filter_class = GoodsFilter
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
     # 排序
     ordering_fields = {'shop_price'}
     # 搜索
-    search_fields = {'name','goods_brief'}
-    filter_class = GoodsFilter
+    search_fields = {'name', 'goods_brief'}
 
-class CategoryViewset(mixins.ListModelMixin,mixins.RetrieveModelMixin,viewsets.GenericViewSet):
+
+class CategoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """"
     List :
         商品分类列表数据
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = CategorySerializer
-
-
-

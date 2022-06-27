@@ -8,12 +8,14 @@ from users.models import VerifyCode
 
 User = get_user_model()
 
+
 class EmailSerializer(serializers.Serializer):
-    email = serializers.CharField(required=True,label='邮箱地址')
+    email = serializers.CharField(required=True, label='邮箱地址')
 
     def validate_email(self, email):
         """
         验证email
+        :param email:
         :param data:
         :return:
         """
@@ -29,17 +31,19 @@ class EmailSerializer(serializers.Serializer):
             raise serializers.ValidationError('请一分钟后再次发送')
         return email
 
+
 class UserRegSerializer(serializers.ModelSerializer):
-    code = serializers.CharField(max_length=6, min_length=6, write_only=True,required=True,help_text='验证码',label='验证码',
+    code = serializers.CharField(max_length=6, min_length=6, write_only=True, required=True, help_text='验证码',
+                                 label='验证码',
                                  error_messages={
-                                     'required':'请输入验证码',
-                                     'max_length':"验证码格式错误",
+                                     'required': '请输入验证码',
+                                     'max_length': "验证码格式错误",
                                      'min_length': "验证码格式错误",
-                                     'blank':'请输入验证码'
+                                     'blank': '请输入验证码'
                                  })
-    username = serializers.CharField(required=True,allow_blank=False,label='用户名',
-                                     validators=[UniqueValidator(queryset=User.objects.all(),message="用户存在")])
-    password = serializers.CharField(style={'input_type':'password'},label='密码',write_only=True)
+    username = serializers.CharField(required=True, allow_blank=False, label='用户名',
+                                     validators=[UniqueValidator(queryset=User.objects.all(), message="用户存在")])
+    password = serializers.CharField(style={'input_type': 'password'}, label='密码', write_only=True)
 
     def validate_code(self, code):
         verify_record = VerifyCode.objects.filter(email=self.initial_data['username']).order_by('-add_time')
@@ -54,12 +58,13 @@ class UserRegSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError('验证码错误')
 
-    def validate(self,attrs):
-        attrs['email']=attrs['username']
+    def validate(self, attrs):
+        attrs['email'] = attrs['username']
         del attrs['code']
         # self.fields.pop('code')
         return attrs
-    #在serialiazer中对密码加密
+
+    # 在serialiazer中对密码加密
     # def create(self, validated_data):
     #     user = super(UserRegSerializer,self).create(validated_data=validated_data)
     #     user.set_password(validated_data['password'])
@@ -68,4 +73,4 @@ class UserRegSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username','email','code','password')
+        fields = ('username', 'email', 'code', 'password')

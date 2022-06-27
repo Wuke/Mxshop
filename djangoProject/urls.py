@@ -22,41 +22,40 @@ from djangoProject.settings import MEDIA_ROOT
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 # from goods.view_base import GoodsListView
-from goods.views import GoodsListViewSet,CategoryViewset
+from goods.views import GoodsListViewSet, CategoryViewset
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
-
-from users.views import EmailCodeViewset,UserViewset
+from user_operation.views import UserFavViewset
+from users.views import EmailCodeViewset, UserViewset
 
 router = DefaultRouter()
 
 # 配置goods的url
-router.register(r'goods',GoodsListViewSet,basename='goods_list')
+router.register(r'goods', GoodsListViewSet, basename='goods_list')
 # 配置GoodsCategory的url
-router.register(r'categories',CategoryViewset,basename='categories')
-#配置UserViewset的url
-router.register(r'Register',UserViewset,basename='users')
-
-router.register(r'verification',EmailCodeViewset,basename='email')
+router.register(r'categories', CategoryViewset, basename='categories')
+# 配置UserViewset的url
+router.register(r'Register', UserViewset, basename='users')
+# 收藏
+router.register(r'userfavs',UserFavViewset,basename='userfavs')
+# 用户邮箱注册
+router.register(r'verification', EmailCodeViewset, basename='email')
 # goods_list = GoodsListViewSet.as_view({
 #     'get':'list',
 # })
 
 urlpatterns = [
     url('admin/', xadmin.site.urls),
-    url(r'^media/(?P<path>.*)$',serve,{'document_root':MEDIA_ROOT}),
-    url(r'^api-auth/',include('rest_framework.urls',namespace='rest_framework')),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    #商品列表页
-    url(r'^',include(router.urls)),
-    url(r'docs/',include_docs_urls(title='mx生鲜')),
+    # 商品列表页
+    url(r'^', include(router.urls)),
+    url(r'docs/', include_docs_urls(title='mx生鲜')),
     # drf token
     # url(r'^drf_token', views.obtain_auth_token),
     # jwt token
     url(r'^login/', obtain_jwt_token),
-
-
-
 
 ]
