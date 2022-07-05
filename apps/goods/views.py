@@ -1,10 +1,15 @@
+import pandas as pd
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import mixins
 from rest_framework import viewsets, permissions
+from django.core.mail import EmailMessage, send_mail
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 # from rest_framework_simplejwt import authentication
+from django.conf import settings
+
+import time
 
 from .filters import GoodsFilter
 from .serializers import GoodsSerializer, CategorySerializer
@@ -20,7 +25,7 @@ class GoodsPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet,mixins.RetrieveModelMixin):
+class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     """商品列表页，分页，搜索，过滤，排序"""
     queryset = Goods.objects.all()
     serializer_class = GoodsSerializer
@@ -29,11 +34,11 @@ class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet,mixins.Ret
     # authentication_classes = (JSONWebTokenAuthentication,)
     pagination_class = GoodsPagination
     filter_class = GoodsFilter
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
-    # 排序
-    ordering_fields = {'shop_price'}
-    # 搜索
-    search_fields = {'name', 'goods_brief'}
+    filter_backends = (DjangoFilterBackend,)
+    # # 排序
+    # ordering_fields = {'shop_price'}
+    # # 搜索
+    # search_fields = {'name', 'goods_brief'}
 
 
 class CategoryViewset(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):

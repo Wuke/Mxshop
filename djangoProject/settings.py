@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_filters',
     # 'rest_framework.authtoken',
     'rest_framework_jwt',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [

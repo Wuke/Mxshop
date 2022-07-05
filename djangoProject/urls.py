@@ -28,7 +28,7 @@ from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 from user_operation.views import UserFavViewset
 from users.views import EmailCodeViewset, UserViewset
-
+from extra_apps import scheduler
 router = DefaultRouter()
 
 # 配置goods的url
