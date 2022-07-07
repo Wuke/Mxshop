@@ -165,6 +165,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema'
 }
 
 JWT_AUTH = {
@@ -186,7 +187,7 @@ EMAIL_PORT = 25
 # 发送邮件的邮箱，需要配置开通SMTP
 EMAIL_HOST_USER = '1243209334@qq.com'
 # 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = 'kgfuwlorkfeujehc'
+EMAIL_HOST_PASSWORD = 'bqhzsaijxjvcjgdf'
 # 收件人看到的发件人
 EMAIL_FROM = 'test<1243209334@qq.com>'
 # 这⾥必须是True，否则发送不成功

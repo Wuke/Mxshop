@@ -42,3 +42,7 @@ class GoodsSerializer(serializers.ModelSerializer):
         model = Goods
         # fields = ('name','click_num','market_price','add_time')
         fields = "__all__"
+
+class FilterGoodsSerializer(serializers.Serializer):
+    is_hot = serializers.BooleanField()
+    name = serializers.CharField(max_length=50,required=False,allow_blank=True)

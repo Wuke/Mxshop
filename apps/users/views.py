@@ -80,6 +80,7 @@ class EmailCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
             )
 
 
+
 class UserViewset(CreateModelMixin, viewsets.GenericViewSet):
     """
     用户
